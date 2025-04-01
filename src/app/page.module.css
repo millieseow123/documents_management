@@ -1,0 +1,14 @@
+.buttons > button {
+  padding: 6px 24px;
+  border-radius: 6px;
+}
+
+.uploadContainer > div {
+	border-style: dashed;
+  border-color: #cfd8dc;
+  background-color: #f9f9f9;
+	cursor: pointer;
+  text-align: center;
+  padding: 48px 72px;
+  margin-bottom: 32px;
+}
