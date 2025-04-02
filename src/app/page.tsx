@@ -24,6 +24,8 @@ import styles from './page.module.css';
 /*
  * Homepage which displays the documents management system UI.
  * Handles document list rendering, file/ folder creation, searching across documents, deleting, and renaming documents.
+ * Icon beside name and date header allows for sorting of files according to names and dates respectively
+ * For addition of new file/ folder, it does not allow for duplicate documents name
  */
 
 export default function HomePage() {
@@ -74,6 +76,7 @@ export default function HomePage() {
     setPopupType(null);
     setAllFiles(updatedFiles);
     setFilteredFiles(updatedFiles);
+    setFolderName('');
   };
 
   const handleUploadFiles = () => {
@@ -101,9 +104,14 @@ export default function HomePage() {
     }));
 
     const updatedFiles = [...newFile, ...allFiles];
-    setPopupType(null);
     setAllFiles(updatedFiles);
     setFilteredFiles(updatedFiles);
+    setPopupType(null);
+
+    setSelectedFiles([]);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
