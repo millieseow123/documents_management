@@ -1,0 +1,12 @@
+.container > div > div {
+  border-radius: 6px;
+  width: 100%
+}
+
+.searchField {
+  width: 100%
+}
+
+.searchButton > svg {
+  color: #001A5C;
+}

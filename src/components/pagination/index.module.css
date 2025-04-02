@@ -1,0 +1,17 @@
+.container > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.container > div > div {
+  display: flex;
+  align-items: center;
+}
+
+
+.pageNumbers :global(.MuiPaginationItem-root.Mui-selected) {
+  color: #1817BC;
+  background-color: transparent;
+  font-weight: 700;
+}

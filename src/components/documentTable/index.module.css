@@ -1,0 +1,53 @@
+.tableContainer > div:first-child {
+  border-radius: 8px;
+  max-height: 60vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.tableContainer > div > table {
+  table-layout: fixed;
+}
+
+.tableHeaderRow {
+  background-color: #001A5C;
+  color: white;
+}
+
+.tableHeader {
+  align-items: center;
+  color: white;
+  display: flex;
+  gap: 8px;
+}
+
+.tableHeader > svg {
+  cursor: pointer;
+}
+
+.tableBodyRow {
+  cursor: pointer;
+}
+
+.nameCell {
+  align-items: center;
+  display: flex;
+  gap: 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nameCell > p {
+  font-weight: bold;
+}
+
+.renameInput {
+  background: transparent;
+  border: 1px solid gray;
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 400;
+  outline: none;
+  width: 100%;
+}

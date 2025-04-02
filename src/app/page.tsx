@@ -1,9 +1,5 @@
 "use client";
 
-import '@fontsource/inter/400.css';
-import '@fontsource/inter/500.css';
-import '@fontsource/inter/600.css';
-
 import { useEffect, useRef, useState } from 'react';
 import {
   Box,
@@ -16,14 +12,19 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import UploadIcon from '@/assets/icons/upload.svg';
-
 import DocumentTable from '@/components/documentTable';
 import PopUp from '@/components/popUp';
 import SearchBar from '@/components/searchBar';
+import { CONSTANTS } from '@/constants/constants';
 import { getAllDocuments } from '@/services/fileService';
 import { DocumentType, FileEntry } from '@/services/fileService/model';
 
 import styles from './page.module.css';
+
+/*
+ * Homepage which displays the documents management system UI.
+ * Handles document list rendering, file/ folder creation, searching across documents, deleting, and renaming documents.
+ */
 
 export default function HomePage() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -62,7 +63,7 @@ export default function HomePage() {
       id: Date.now(),
       name: folderName,
       type: DocumentType.Folder,
-      createdBy: "John Green",
+      createdBy: "New User",
       date: new Date().toLocaleDateString("en-GB", {
         day: "2-digit", month: "short", year: "numeric"
       }),
@@ -93,7 +94,7 @@ export default function HomePage() {
       name: file.name,
       size: `${(file.size / 1024).toFixed(1)} KB`,
       type: DocumentType.File,
-      createdBy: "John Green",
+      createdBy: "New User",
       date: new Date().toLocaleDateString("en-GB", {
         day: "2-digit", month: "short", year: "numeric"
       }),
@@ -129,8 +130,6 @@ export default function HomePage() {
     });
   }, []);
 
-  const isFolder = popupType === DocumentType.Folder;
-
   const folderContent = (
     <TextField
       autoFocus
@@ -144,13 +143,13 @@ export default function HomePage() {
 
   const fileContent = (
     <Box>
-      <div className={styles.uploadContainer}>
+      <div className={styles.uploadFileContainer}>
         <Paper
           variant="outlined"
           onClick={() => fileInputRef.current?.click()}
         >
           <CloudUploadIcon fontSize="large" color="primary" />
-          <Typography mt={2}>Click to browse</Typography>
+          <Typography mt={2}>{CONSTANTS.BUTTONS.BROWSE}</Typography>
           <input
             type="file"
             multiple
@@ -163,7 +162,7 @@ export default function HomePage() {
       {selectedFiles.length > 0 && (
         <Box mt={2}>
           <Typography variant="body2" color="text.secondary" mb={1}>
-            Selected files:
+            {CONSTANTS.MESSAGES.SELECTED_FILES}
           </Typography>
           {selectedFiles.map((file, idx) => (
             <Typography key={idx}>- {file.name}</Typography>
@@ -175,47 +174,52 @@ export default function HomePage() {
 
   return (
     <Box p={4}>
-      <Typography variant="h4" mb={2} color="text.secondary">Documents</Typography>
+      <Typography variant="h4" mb={2} color="text.secondary">{CONSTANTS.TITLES.DOCUMENTS}</Typography>
 
       <Stack direction="row" spacing={2} mb={2} justifyContent="space-between">
-        <SearchBar placeholderText="Search" onSearch={searchHandler} />
+        <SearchBar placeholderText={CONSTANTS.PLACEHOLDERS.SEARCH} onSearch={searchHandler} />
         <Stack className={styles.buttons} direction="row" spacing={2}>
           <Button
             variant="outlined"
             startIcon={<UploadIcon />}
             onClick={() => handleOpenPopup(DocumentType.File)}
           >
-            <Typography variant="button">Upload files</Typography>
+            <Typography variant="button">{CONSTANTS.BUTTONS.UPLOAD_FILES}</Typography>
           </Button>
           <Button
             variant="contained"
             startIcon={<AddIcon />}
             onClick={() => handleOpenPopup(DocumentType.Folder)}
           >
-            <Typography variant="button">Add new folder</Typography>
+            <Typography variant="button">{CONSTANTS.BUTTONS.ADD_FOLDER}</Typography>
           </Button>
         </Stack>
       </Stack>
 
-      <DocumentTable files={filteredFiles} />
+      <DocumentTable files={filteredFiles} setFiles={(newFiles) => {
+        setAllFiles(newFiles);
+        setFilteredFiles(newFiles);
+      }} />
 
       <PopUp
         open={popupType !== null}
         onClose={handleDialogClose}
-        onSubmit={isFolder ? handleCreateFolder : handleUploadFiles}
+        onSubmit={popupType === DocumentType.Folder
+          ? handleCreateFolder
+          : handleUploadFiles}
         isDisabled={
           (renderedPopupType === DocumentType.Folder && folderName.trim() === "") ||
           (renderedPopupType === DocumentType.File && selectedFiles.length === 0)
         }
         title={renderedPopupType === DocumentType.Folder
-          ? "Create New Folder"
+          ? CONSTANTS.TITLES.CREATE_FOLDER
           : renderedPopupType === DocumentType.File
-            ? "Upload Files"
+            ? CONSTANTS.TITLES.UPLOAD_FILES
             : ""}
         submitText={renderedPopupType === DocumentType.Folder
-          ? "Create"
+          ? CONSTANTS.BUTTONS.CREATE
           : renderedPopupType === DocumentType.File
-            ? "Upload"
+            ? CONSTANTS.BUTTONS.UPLOAD
             : ""}
       >
         {renderedPopupType === DocumentType.Folder ? folderContent :
